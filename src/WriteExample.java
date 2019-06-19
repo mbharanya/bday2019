@@ -7,7 +7,7 @@ public class WriteExample
 		try
 		{
 			int sampleRate = 44100;		// Samples per second
-			double duration = 5.0;		// Seconds
+			double duration = 10.0;		// Seconds
 
 			// Calculate the number of frames required for specified duration
 			long numFrames = (long)(duration * sampleRate);
