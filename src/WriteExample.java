@@ -13,7 +13,7 @@ public class WriteExample
 			long numFrames = (long)(duration * sampleRate);
 
 			// Create a wav file with the name specified as the first argument
-			WavFile wavFile = WavFile.newWavFile(new File("tst.wav"), 2, numFrames, 16, sampleRate);
+			WavFile wavFile = WavFile.newWavFile(new File("test.wav"), 2, numFrames, 16, sampleRate);
 
 			// Create a buffer of 100 frames
 			double[][] buffer = new double[2][100];

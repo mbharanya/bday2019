@@ -2,7 +2,7 @@ import java.io._
 
 object wav extends App{
   try { // Open the wav file specified as the first argument
-    val wavFile = WavFile.openWavFile(new Nothing(args(0)))
+    val wavFile = WavFile.openWavFile(new File("8k16bitpcm.wav"))
     // Display information about the wav file
     wavFile.display
     // Get the number of audio channels in the wav file
@@ -10,8 +10,8 @@ object wav extends App{
     // Create a buffer of 100 frames
     val buffer = new Array[Double](100 * numChannels)
     var framesRead = 0
-    var min = Double.MAX_VALUE
-    var max = Double.MIN_VALUE
+    var min = Double.MaxValue
+    var max = Double.MinValue
     do { // Read frames into buffer
       framesRead = wavFile.readFrames(buffer, 100)
       // Loop through frames and look for minimum and maximum value
@@ -32,9 +32,9 @@ object wav extends App{
     // Close the wavFile
     wavFile.close
     // Output the minimum and maximum value
-    System.out.printf("Min: %f, Max: %f\n", min, max)
+    printf("Min: %f, Max: %f\n", min, max)
   } catch {
     case e: Exception =>
-      System.err.println(e)
+      println(e)
   }
 }
