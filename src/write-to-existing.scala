@@ -1,7 +1,9 @@
 import java.io.File
 
+import scala.collection.immutable
+
 object writeToExisting extends App {
-  val text =
+  val text: immutable.Seq[Boolean] =
     """
       |import java.io.File
       |
@@ -39,35 +41,36 @@ object writeToExisting extends App {
       |  wavToWrite.close()
       |  wavFile.close()
       |}
-    """.stripMargin
+    """.stripMargin.map(_.toByte).flatMap(_.toBinaryString.map{
+      case '0' => false
+      case _ => true
+    })
 
   val wavFile = WavFile.openWavFile(new File("8k16bitpcm.wav"))
   wavFile.display()
   val wavToWrite = WavFile.newWavFile(new File("8k16bitpcm-edited.wav"), wavFile.getNumChannels, wavFile.getNumFrames, wavFile.getValidBits, wavFile.getSampleRate)
   wavToWrite.display()
 
+
   // Get the number of audio channels in the wav file
   val numChannels = wavFile.getNumChannels
   // Create a buffer of 100 frames
   val buffer = new Array[Double](100 * numChannels)
   var framesRead = 0
-  var min = Double.MaxValue
-  var max = Double.MinValue
 
   do { // Read frames into buffer
     framesRead = wavFile.readFrames(buffer, 100)
 
     val modifiedBuffer: Array[Double] = buffer.zipWithIndex.map {
       case (value, frameCounter) => {
-        println(value + text(frameCounter).toDouble / 1000)
-        value + text(frameCounter).toDouble / 1000
+        if(text(frameCounter))
+          0.5 * value
+        else
+          0.2 * value
       }
     }
 
-    //    val modifiedBuffer: Array[Double] = buffer.map(_ * 1)
-
     wavToWrite.writeFrames(modifiedBuffer, framesRead)
-
   } while ( {
     framesRead != 0
   })
