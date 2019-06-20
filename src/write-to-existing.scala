@@ -54,25 +54,20 @@ object writeToExisting extends App {
   var min = Double.MaxValue
   var max = Double.MinValue
 
-  var i = 0
   do { // Read frames into buffer
     framesRead = wavFile.readFrames(buffer, 100)
 
-    //    val modifiedBuffer: Array[Double] = buffer.zipWithIndex.map {
-    //      case (value, frameCounter) => {
-    //        println(text(frameCounter) / 1000)
-    //        println(value + text(frameCounter).toDouble / 1000)
-    //        value + text(frameCounter).toDouble / 1000
-    //      }
-    //    }
+    val modifiedBuffer: Array[Double] = buffer.zipWithIndex.map {
+      case (value, frameCounter) => {
+        println(value + text(frameCounter).toDouble / 1000)
+        value + text(frameCounter).toDouble / 1000
+      }
+    }
 
-    val modifiedBuffer: Array[Double] = buffer.map(_ * 1)
+    //    val modifiedBuffer: Array[Double] = buffer.map(_ * 1)
 
-    val remaining = wavFile.getFramesRemaining
-    val toWrite: Int = if (remaining > 100) 100 else remaining.toInt
+    wavToWrite.writeFrames(modifiedBuffer, framesRead)
 
-    wavToWrite.writeFrames(modifiedBuffer, toWrite)
-    i += 100
   } while ( {
     framesRead != 0
   })
