@@ -38,25 +38,25 @@ object writeToExisting extends App {
 
   do { // Read frames into buffer
     framesRead = wavFile.readFrames(buffer, 100)
-    workedOnFrames += framesRead
     val modifiedBuffer: Array[Double] = buffer.zipWithIndex.map {
       case (value, frameCounter) => {
         val meep = (workedOnFrames + frameCounter) / 50
         if (meep < text.length && text(
           meep
         ))
-          0.1 * Math.sin(2.0 * Math.PI * hz * frameCounter / wavFile.getSampleRate) + 0
+          0.1 * Math.sin(2.0 * Math.PI * hz * frameCounter / wavFile.getSampleRate) + value
         else
-          0
+          value
       }
     }
+    workedOnFrames += framesRead
 
     wavToWrite.writeFrames(modifiedBuffer, framesRead)
   } while ( {
     framesRead != 0
   })
 
-  println("wrote filde3")
+  println("wrote file3")
   // Close the wavFile
 
   wavToWrite.close()
