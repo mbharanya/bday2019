@@ -4,7 +4,9 @@ import scala.collection.immutable
 
 object writeToExisting extends App {
 
-  val listOfBin: Seq[String] =  "ha".map(_.toByte).map(_.toBinaryString).map("0000000" + _).map(_.takeRight(8))
+  val listOfBin: Seq[String] =
+    "ha"
+  .map(_.toByte).map(_.toBinaryString).map("0000000" + _).map(_.takeRight(8))
 
 
   val text=
@@ -13,14 +15,12 @@ object writeToExisting extends App {
       case _ => true
     }
 
-  println("ha".map(_.toByte).map(_.toBinaryString))
-
-
+  println(listOfBin)
 
 
   val wavFile = WavFile.openWavFile(new File("epicsaxguy.wav"))
   wavFile.display()
-  val wavToWrite = WavFile.newWavFile(new File("epicsaxguy-edited.wav"), wavFile.getNumChannels, wavFile.getNumFrames, wavFile.getValidBits, wavFile.getSampleRate)
+  val wavToWrite = WavFile.newWavFile(new File("epicsaxguy-edited.wav"), 1, wavFile.getNumFrames, wavFile.getValidBits, wavFile.getSampleRate)
   wavToWrite.display()
 
   val duration = wavFile.getNumFrames / wavFile.getSampleRate
