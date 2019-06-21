@@ -1,37 +1,64 @@
 import java.io.File
+import util.control.Breaks._
 
 object readFromModified extends App {
-  val wavFile = WavFile.openWavFile(new File("8k16bitpcm-edited.wav"))
-  wavFile.display()
+  val edited = WavFile.openWavFile(new File("epicsaxguy-edited.wav"))
+  val orig = WavFile.openWavFile(new File("epicsaxguy.wav"))
+
+  edited.display()
 
 
   // Get the number of audio channels in the wav file
-  val numChannels = wavFile.getNumChannels
-  // Create a buffer of 100 frames
-  val buffer = new Array[Double](100 * numChannels)
+  val numChannels = edited.getNumChannels
+
+  val bufferSize = 50 * 8
+
+  val bufferOg = new Array[Double](bufferSize * numChannels)
+  val bufferEdited = new Array[Double](bufferSize * numChannels)
+
   var framesRead = 0
-  var min = Double.MaxValue
-  var max = Double.MinValue
+  var origFramesRead = 0
+  breakable {
+    do { // Read frames into buffer
 
-  var i = 0
-  do { // Read frames into buffer
-    framesRead = wavFile.readFrames(buffer, 100)
+      origFramesRead = orig.readFrames(bufferOg, bufferSize)
+      framesRead = edited.readFrames(bufferEdited, bufferSize)
 
-    buffer.zipWithIndex.map {
-      case (value, frameCounter) => {
-        value
-//        println(value + text(frameCounter).toDouble / 1000)
-//        value + text(frameCounter).toDouble / 1000
-      }
-    }
+      val groups: List[Array[Double]] = bufferEdited.zipWithIndex.map {
+        case (value, index) => {
+          Math.abs(value - bufferOg(index))
+          value
+        }
+      }.grouped(50).toList
 
-//    val modifiedBuffer: Array[Double] = buffer.map(_ + 10000)
+//      bufferEdited.foreach(print)
+//      break
 
-    val remaining = wavFile.getFramesRemaining
 
-  } while ( {
-    framesRead != 0
-  })
+
+      val sum = groups.map {
+        _.reduce(_ + _)
+      }.map(_ / 50).map(_ > 0.0001)
+        .map(b => if (b) "1" else "0").reduce(_ + _).take(8).reverse
+
+      val letter = (Integer.parseInt(sum, 2)).toChar
+
+      //      .tapEach(_.reduce((_ + _))).tapEach(_.map(_ > 0.1E-14)).toList
+      //    print(sum)
+      //
+          print(letter)
+      //
+
+
+      //      .reduce(_ + _) > 0.1E-14
+
+
+      //    val modifiedBuffer: Array[Double] = buffer.map(_ + 10000)
+
+    } while ( {
+      framesRead != 0
+    })
+  }
   // Close the wavFile
-  wavFile.close()
+  edited.close()
 }
