@@ -8,7 +8,7 @@ object readFromModified extends App {
 
   val numChannels = edited.getNumChannels
 
-  val bufferSize = 10 * 8
+  val bufferSize = 50 * 8
 
   val bufferOg: Array[Array[Double]] = Array.ofDim(2, bufferSize)
   val bufferEdited: Array[Array[Double]] = Array.ofDim(2, bufferSize)
@@ -25,12 +25,12 @@ object readFromModified extends App {
       case (value, index) => {
         Math.abs(value - bufferOg(0)(index))
       }
-    }.grouped(10).toList
+    }.grouped(50).toList
 
 
     val sum = groups.map {
       _.reduce(_ + _)
-    }.map(_ / 10).map(_ > 0.0001)
+    }.map(_ / 50).map(_ > 0.0001)
       .map(b => if (b) "1" else "0").reduce(_ + _).take(8)
 
     val letter = (Integer.parseInt(sum, 2)).toChar
