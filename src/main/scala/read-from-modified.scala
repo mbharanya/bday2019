@@ -8,10 +8,10 @@ object readFromModified extends App {
 
   val numChannels = edited.getNumChannels
 
-  val bufferSize = 50 * 8
+  val bufferSize = 10 * 8
 
-  val bufferOg = new Array[Double](bufferSize * 2)
-  val bufferEdited = new Array[Double](bufferSize * 1)
+  val bufferOg: Array[Array[Double]] = Array.ofDim(2, bufferSize)
+  val bufferEdited: Array[Array[Double]] = Array.ofDim(2, bufferSize)
 
   var framesRead = 0
   var origFramesRead = 0
@@ -21,21 +21,21 @@ object readFromModified extends App {
     origFramesRead = orig.readFrames(bufferOg, bufferSize)
     framesRead = edited.readFrames(bufferEdited, bufferSize)
 
-    val groups: List[Array[Double]] = bufferEdited.zipWithIndex.map {
+    val groups: List[Array[Double]] = bufferEdited(0).zipWithIndex.map {
       case (value, index) => {
-        Math.abs(value - bufferOg(index))
+        Math.abs(value - bufferOg(0)(index))
       }
-    }.grouped(50).toList
+    }.grouped(10).toList
 
 
     val sum = groups.map {
       _.reduce(_ + _)
-    }.map(_ / 50).map(_ > 0.0001)
+    }.map(_ / 10).map(_ > 0.0001)
       .map(b => if (b) "1" else "0").reduce(_ + _).take(8)
 
     val letter = (Integer.parseInt(sum, 2)).toChar
 
-    print(letter)
+    if (letter > 0) print(letter)
 
   } while ( {
     framesRead != 0
