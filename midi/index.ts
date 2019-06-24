@@ -6,7 +6,7 @@ var track = new MidiWriter.Track();
 // // Define an instrument (optional):
 track.addEvent(new MidiWriter.ProgramChangeEvent({instrument : 121}));
 
-const link: string = " http://xmb.li/bday2019".toUpperCase();
+const link: string = "Jean-Baptiste Bernus".toUpperCase();
 
 let listOfNotes: string[] = [];
 for (const letter of ["C", "D", "E", "F", "G", "A", "B"]) {
@@ -28,12 +28,4 @@ textInNotes
 .forEach(note => track.addEvent(note))
 
 var write = new MidiWriter.Writer(track);
-console.log(write.saveMIDI("test.midi"));
-
-function range(start, stop) {
-    var result = [];
-    for (var idx = start.charCodeAt(0), end = stop.charCodeAt(0); idx <= end; ++idx) {
-        result.push(String.fromCharCode(idx));
-    }
-    return result;
-};
+write.saveMIDI("test");
