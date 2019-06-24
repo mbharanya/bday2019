@@ -29,3 +29,5 @@ textInNotes
 
 var write = new MidiWriter.Writer(track);
 write.saveMIDI("test");
+
+console.log(write.dataUri())
