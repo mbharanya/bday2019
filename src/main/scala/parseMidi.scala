@@ -18,10 +18,10 @@ object Test extends App {
       yield letter + i).flatten.sortWith(_.charAt(1) < _.charAt(1)).zipWithIndex
 
 
-  val sequence = MidiSystem.getSequence(new File("midi/jb.mid"))
+  val sequence = MidiSystem.getSequence(new File("midi/test.mid"))
   var trackNumber = 0
+
   for (track <- sequence.getTracks) {
-    trackNumber += 1
     var i = 0
     while ( {
       i < track.size

@@ -3,22 +3,9 @@ import java.io.File
 object writeToExisting extends App {
 
   val listOfBin: Seq[String] =
-    """
-      |var MidiWriter = require('midi-writer-js');
+    """data:audio/midi;base64,TVRoZAAAAAYAAAABAIBNVHJrAAAA1gDAeQCQUUCBAIBRQACQZUCBAIBlQACQZUCBAIBlQACQX0CBAIBfQACQOUCBAIA5QACQJkCBAIAmQACQJkCBAIAmQACQbECBAIBsQACQWUCBAIBZQACQR0CBAIBHQACQJECBAIAkQACQWECBAIBYQACQU0CBAIBTQACQJkCBAIAmQACQSECBAIBIQACQR0CBAIBHQACQSkCBAIBKQACQRUCBAIBFQACQbkCBAIBuQACQK0CBAIArQACQKECBAIAoQACQKUCBAIApQACQN0CBAIA3QAD/LwA=
       |
-      |// Start with a new track
-      |var track = new MidiWriter.Track();
-      |
-      |// // Define an instrument (optional):
-      |// track.addEvent(new MidiWriter.ProgramChangeEvent({instrument : 1}));
-      |
-      |// Add some notes:
-      |var note = new MidiWriter.NoteEvent({pitch:["'C4', 'D4', 'E4'"], duration: '4'});
-      |track.addEvent(note);
-      |
-      |// Generate a data URI
-      |var write = new MidiWriter.Writer(track);
-      |console.log(write.saveMIDI("test.midi"));
+      |["C", "D", "E", "F", "G", "A", "B"]
     """.stripMargin
   .map(_.toByte).map(_.toBinaryString).map("0000000" + _).map(_.takeRight(8))
 

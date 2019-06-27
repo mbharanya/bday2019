@@ -6,7 +6,7 @@ var track = new MidiWriter.Track();
 // // Define an instrument (optional):
 track.addEvent(new MidiWriter.ProgramChangeEvent({instrument : 121}));
 
-const link: string = "Jean-Baptiste Bernus".toUpperCase();
+const link: string = "http://xmb.li/cbday2019".toUpperCase();
 
 let listOfNotes: string[] = [];
 for (const letter of ["C", "D", "E", "F", "G", "A", "B"]) {
